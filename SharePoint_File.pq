@@ -1,9 +1,9 @@
 let
   Source = 
-    let TenantName    = "WayneCorp", // update it with your tenant name, usually your company name (your sharepoint url starts with TenantName.sharepoint.com)                                                                                          
+    let TenantName    = "WayneCorp", // update it with your tenant name, usually your company name (your sharepoint url starts with TenantName.sharepoint.com)
       BaseUrl         = "https://" & TenantName & ".sharepoint.com/", 
-      // SharePoint root site url has to be hardcoded to avoid hand-authored queries that cannot be refreshed in the Power BI service                                                                                                                               
-      // see https://docs.microsoft.com/en-us/power-bi/connect-data/refresh-data#refresh-and-dynamic-data-sources                                                                                                           
+      // SharePoint root site url has to be hardcoded to avoid hand-authored queries that cannot be refreshed in the Power BI service
+      // see https://docs.microsoft.com/en-us/power-bi/connect-data/refresh-data#refresh-and-dynamic-data-sources
       BaseUrl_Updated = BaseUrl <> "https://WayneCorp.sharepoint.com/", 
       fn              = (SharePoint_File_url as text) as binary =>
         let
@@ -13,7 +13,7 @@ let
           FileUrl_IsValid     = FileUrl_ValidTenant and FileUrl_ValidFormat, 
           Path                = Uri.Parts(SharePoint_File_url)[Path],
           FileUrl_Host        = Uri.Parts(SharePoint_File_url)[Host],
-          FileUrl_Tenant      = Text.BeforeDelimiter(Uri.Parts(SPurl)[Host],".sharepoint.com"),
+          FileUrl_Tenant      = Text.BeforeDelimiter(Uri.Parts(SharePoint_File_url)[Host],".sharepoint.com"),
           PathList            = List.Buffer(List.Select(Text.Split(Path, "/"), each _ <> "")), 
           PathListEnd         = List.RemoveFirstN(PathList, List.PositionOf(PathList, "sites")), 
           RelativeUrl         = Text.Combine(List.FirstN(PathListEnd, 2), "/") & "/_api/web/getfilebyserverrelativeurl('/" & Text.Combine(PathListEnd, "/") & "')/$value", 
