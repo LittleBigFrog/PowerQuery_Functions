@@ -5,8 +5,6 @@ let
       Schema      = Table.AddColumn(Table.Schema(t), "Type", each Expression.Evaluate("type " & [Kind]), type type), 
       RecordTypes = Record.FromList(Schema[Type], Schema[Name]), 
       Columns     = Schema[Name], 
-      keys        = {"Inbred", "Year"}, 
-      Suffix      = null, 
       Average     = Table.Group(
         t, 
         keys, 
